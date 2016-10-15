@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Post
 from .forms import PostForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def post_list(request):
@@ -12,6 +13,7 @@ def post_detail(request, pk):
 	post = get_object_or_404(Post, pk=pk)
 	return render(request, 'blog/post_detail.html', {'post': post})
 	
+@login_required
 def post_new(request):
 	#handle blank form and a filled out blog form/post that was submitted
 	#if we send post data to this view (post method from form on website), 
@@ -30,6 +32,7 @@ def post_new(request):
 	
 #view to edit a post - pass in PK for this view to edit a specific post
 #then pass post in as instance
+@login_required
 def post_edit(request, pk):
 	post = get_object_or_404(Post, pk=pk)
 	if request.method == "POST":
@@ -44,17 +47,20 @@ def post_edit(request, pk):
 	return render(request, 'blog/post_edit.html', {'form': form})
 	
 #view to post drafts of unpublished blog posts
+@login_required
 def post_draft_list(request):
 	posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
 	return render(request, 'blog/post_draft_list.html', {'posts': posts})
 	
 #view to publish a blog post!
+@login_required
 def post_publish(request, pk):
 	post = get_object_or_404(Post, pk=pk)
 	post.publish()
 	return redirect('post_detail', pk=pk)
 
 #view to delete a blog post
+@login_required
 def post_remove(request, pk):
 	post = get_object_or_404(Post, pk=pk)
 	post.delete()
