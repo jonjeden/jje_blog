@@ -1,6 +1,6 @@
 {% extends 'blog/base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Big J's Blog{% endblock %}
 
 {% block content %}
 
@@ -13,5 +13,9 @@
 					<a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a> 
 				</div>					
 		{% endfor %}
+
+{% endblock %}
+
+{% block side_block %}
 
 {% endblock %}

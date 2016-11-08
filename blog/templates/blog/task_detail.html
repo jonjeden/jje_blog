@@ -1,0 +1,43 @@
+{% extends 'blog/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Big J's - {{ task.title }}{% endblock %}
+
+{% block content %}
+
+    <div class="post">
+        
+        {% if user.is_authenticated %}
+			<!-- do something useful
+			<a class="btn btn-default" href="/"><img src="{% static 'ico/edit.png' %}"></a>
+			<a class="btn btn-default" href="/"><img src="{% static 'ico/trash.png' %}"></a> -->
+        {% endif %}      
+        
+        <h1>{{ task.title }}</h1>
+        <i>by {{ task.author.first_name}} {{ task.author.last_name }}</i>
+        <p><br />
+        {{ task.content|linebreaksbr }}
+        </p>
+    </div>
+    
+    <hr>
+    <a class="btn btn-default" href="/">Add note</a>
+    
+    {% for tasknote in task.tasknotes.all %}
+	
+		<div class="comment">
+			<div class="commentdate">
+				{{ tasknote.created_date }}
+			</div>		
+			
+			<p>{{ tasknote.note|linebreaks }}</p>
+		</div>
+		
+	{% empty %}
+		
+		<p>No comments.</p>		
+
+	{% endfor %}
+    
+{% endblock %}

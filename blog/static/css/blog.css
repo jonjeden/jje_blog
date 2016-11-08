@@ -1,7 +1,16 @@
+.post-form textarea, .post-form input {
+    width: 95%;
+}
+
 .comment {
 	margin: 20px 0px 0px 0px;
 }
 
 .commentdate {
 	margin: 0px 0px 0px 0px;
+}
+
+.post {
+    margin-bottom: 40px;
+    margin-top: 0px;
 }

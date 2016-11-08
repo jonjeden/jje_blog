@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Post, Comment
+from .models import Post, Comment, Task, TaskNote
 
 class PostForm(forms.ModelForm):
 	
@@ -14,3 +14,9 @@ class CommentForm(forms.ModelForm):
 	class Meta:
 		model = Comment
 		fields = ('author', 'text',)
+
+class TaskNoteForm(forms.ModelForm):
+	
+	class Meta:
+		model = TaskNote
+		fields = ('note_author', 'note',)
