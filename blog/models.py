@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.forms.fields import URLField
+import datetime
 
 PRIORITY_CHOICES = (
 				(1, 'Low'),
@@ -53,7 +54,11 @@ class Task(models.Model):
 	created_date = models.DateTimeField(default=timezone.now)
 	completed = models.BooleanField(default=False)
 	priority = models.IntegerField(choices=PRIORITY_CHOICES, default=2)
-		
+	
+	def mdy_due_date(self):	
+		str_date = self.due_date.strftime("%b") + ' ' + self.due_date.day.__str__()
+		return str_date
+	
 	class Meta:
 		ordering = ['-priority', 'title']
 	

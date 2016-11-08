@@ -106,7 +106,7 @@
               <li><a href="/">Link</a></li>  -->
               <li class="nav-header">External Links</li>
               {% for weblink in LINK_LIST %}
-              	<li><a href="{{ weblink. }}" target="_blank">{{ weblink.title }}</a></li>
+              	<li><a href="{{ weblink.webweb_url }}" target="_blank">{{ weblink.title }}</a></li>
               {% endfor %}
              
 		{% if user.is_authenticated %}
@@ -115,7 +115,7 @@
      	     
      	    {% for task in TASK_LIST %}
      	      {% if task.completed = False %}
-			   <li><a href="{% url 'task_detail' pk=task.pk %}">{{ task.title }}</a></li>
+			   <li><a href="{% url 'task_detail' pk=task.pk %}">{{ task.title }} (due {{ task.mdy_due_date }})</a></li>
 			  {% endif %}
 			{% endfor %}
 		{% endif %}             
