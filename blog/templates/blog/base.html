@@ -106,7 +106,7 @@
               <li><a href="/">Link</a></li>  -->
               <li class="nav-header">External Links</li>
               {% for weblink in LINK_LIST %}
-              	<li><a href="{{ weblink.webweb_url }}" target="_blank">{{ weblink.title }}</a></li>
+              	<li><a href="{{ weblink.web_url }}" target="_blank">{{ weblink.title }}</a></li>
               {% endfor %}
              
 		{% if user.is_authenticated %}
