@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Big J's Blog - Projects{% endblock %}
+
+{% block content %}
+
+	{% for project in projects %}
+		<div class="project">
+				<a href="{% url 'project_detail' pk=project.pk %}">{{ project.name }}</a>
+				<div class="number">Project number: {{ project.number }}</div>
+					
+				<p>{{ project.description|truncatewords:20 }}</p>				 
+		</div>
+	{% endfor %}
+
+{% endblock %}
+
+{% block side_block %}
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'blog/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Big J's - {{ project.name }}{% endblock %}
+
+{% block content %}
+
+    <div class="project">
+        
+        {% if project.visible %}
+			<div class="project_name">
+				<h3>{{ project.name }} - {{ project.number }}</h3>
+			</div>
+			
+			<div>
+				<ul>
+					<li>Department: {{ project.department }}</li>
+					<li>Fiscal Year: {{ project.fiscal_year }}</li>
+					<li>Total Cost: {{ project.total_cost }}</li>
+					<li>Start Date: {{ project.start_date }}</li>
+					<li>End Date: {{ project.close_date }}</li>
+					<li>Last updated: {{ project.last_update }}</li>
+				</ul>
+			</div>
+			
+			<hr></hr>
+        <p>Description: <br />
+        
+        {{ project.description|linebreaksbr }}
+        
+        </p>
+
+		{% else %}			
+			<div>Invisible
+			</div>
+        {% endif %}
+ 
+{% endblock %}

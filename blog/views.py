@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Post, Comment, Task, TaskNote
+from .models import Post, Comment, Task, TaskNote, Project, Department
 from .forms import PostForm, CommentForm, TaskNoteForm
 from django.contrib.auth.decorators import login_required
 
@@ -9,6 +9,14 @@ def post_list(request):
 	posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
 	tasks = get_task_list()
 	return render(request, 'blog/post_list.html', {'posts': posts, 'tasks': tasks})
+
+def project_list(request):
+	projects = Project.objects.filter(visible=True).order_by('name')
+	return render(request, 'project/project_list.html', {'projects': projects})
+
+def project_detail(request, pk):
+	project = get_object_or_404(Project, pk=pk)
+	return render(request, 'project/project_detail.html', {'project': project})
 
 #function to get task objects from database
 def get_task_list():

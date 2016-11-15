@@ -92,19 +92,19 @@ class WebLink(models.Model):
 '''
 Project that is being followed by subscribers
 and tracked with notes. the notes help generate emails
-    
+blank = true is for validation, null=true for database
+''' 
 class Project(models.Model):
     name = models.CharField(max_length=200, unique=True)
     number = models.IntegerField(default=0)
-    department = models.ForeignKey(Department) #FK
-    description = models.CharField(max_length=400, blank=True)
+    department = models.ForeignKey('blog.Department', related_name='projects') #FK
+    description = models.TextField()
     fiscal_year = models.IntegerField(default=0)
     total_cost = models.FloatField(max_length=40, default=0)
-    start_date = models.DateField(default="2000-01-01")
-    #close_date = models.DateField()
+    start_date = models.DateField(null=True, blank=True)
+    close_date = models.DateField(null=True, blank=True)
     last_update = models.DateTimeField(auto_now=True)
-    visible = models.BooleanField(default=True)
-    
+    visible = models.BooleanField(default=True)    
     #subscribers = models.ManyToManyField('Subscriber', blank=True)
     
     def __str__(self): 
@@ -112,9 +112,11 @@ class Project(models.Model):
     
     class Meta:
         ordering = ('name',)
+
+
 '''
-"""
-#this defines typically a government department that a project falls under
+this defines typically a government department that a project falls under
+'''
 class Department(models.Model):
     name = models.CharField(max_length=200, unique=True)
     staff_size = models.IntegerField(default=0)
@@ -128,11 +130,33 @@ class Department(models.Model):
     
     def __str__(self):
         return self.name
-
-	def budget(self):
-		return "$%s" % self.budget
+    
+    def budget(self):
+	    return "$%s" % self.budget
 
     class Meta:
         ordering = ('name',)
+   
+#contact to keep track of     
+class Contact(models.Model):
+    # This line is required. Links UserProfile to a User model instance.
+	#user = models.OneToOneField('auth.User')
+	
+	first_name = models.CharField(max_length=40, null=True, blank=True)
+	last_name = models.CharField(max_length=40, null=True, blank=True)
+	email = models.CharField(max_length=100, null=True, blank=True)
+	projects = models.ManyToManyField('blog.Project', blank=True)
+		
+    #ex for cascade delete: reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE)
 
-"""
+    # The additional attributes we wish to include.
+	website = models.URLField(blank=True)
+	company = models.CharField(max_length=200, blank=True)
+	phone1 = models.IntegerField(default=0)
+	phone2 = models.IntegerField(default=0)	
+	notes = models.TextField()
+	#picture = models.ImageField(upload_to='profile_images', blank=True)
+
+    # Override the __unicode__() method to return out something meaningful!
+	def __str__(self):
+		return self.first_name + ' ' + self.last_name

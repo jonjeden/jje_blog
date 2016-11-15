@@ -3,7 +3,8 @@ from blog import views
 
 urlpatterns = [
 	url(r'^$', views.post_list, name='post_list'),
-	#url(r'^project/$, views.project_list, name='project_list'),
+	url(r'^project/$', views.project_list, name='project_list'),
+	url(r'^project/(?P<pk>\d+)/$', views.project_detail, name='project_detail'),
 	url(r'^task/(?P<pk>\d+)/$', views.task_detail, name='task_detail'),
 	url(r'^task/(?P<pk>\d+)/tasknote/$', views.add_note_to_task, name='add_task_note'),
     url(r'^post/(?P<pk>\d+)/$', views.post_detail, name='post_detail'),
@@ -16,5 +17,4 @@ urlpatterns = [
     url(r'^post/(?P<pk>\d+)/comment/$', views.add_comment_to_post, name='add_comment_to_post'),
     url(r'^comment/(?P<pk>\d+)/remove/$', views.comment_remove, name='comment_remove'),
     url(r'^comment/(?P<pk>\d+)/approve/$', views.comment_approve, name='comment_approve'),
-  
 ]
