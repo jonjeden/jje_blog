@@ -4,6 +4,7 @@
 
 {% block content %}
 
+{% if projects %}
 	{% for project in projects %}
 		<div class="project">
 				<a href="{% url 'project_detail' pk=project.pk %}">{{ project.name }}</a>
@@ -12,6 +13,12 @@
 				<p>{{ project.description|truncatewords:20 }}</p>				 
 		</div>
 	{% endfor %}
+
+{% else %}
+
+<p>No projects.</p>
+
+{% endif %}
 
 {% endblock %}
 
