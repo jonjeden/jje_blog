@@ -1,0 +1,40 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Big J's Blog - Projects{% endblock %}
+
+{% block content %}
+
+{% if tasks %}
+	{% for task in tasks %}
+		<div class="task-list">
+		
+				<div class="title">
+					<h4><a href="{% url 'task_detail' pk=task.pk %}">{{ task.title }}</a></h4>
+				</div>
+				<div class="priority">
+				<i> 
+				{% if task.priority == 1 %}
+				Low priority
+				{% elif task.priority == 2 %}
+				Normal priority
+				{% else %}
+				<font color="#FF0000">High priority</font>
+				{% endif %} - created by {{ task.author|title }}</i>
+				</div>
+				<div class="date">Due date: {{ task.due_date }}</div>
+				<div>Completed? {{ task.completed }}</div>			
+				<p>{{ task.content }}</p>				 
+		</div>
+	{% endfor %}
+
+{% else %}
+
+<p>No tasks.</p>
+
+{% endif %}
+
+{% endblock %}
+
+{% block side_block %}
+
+{% endblock %}

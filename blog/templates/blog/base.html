@@ -110,11 +110,13 @@
               {% endfor %}
              
 		{% if user.is_authenticated %}
-	 	  	  <li class="nav-header">Tasks</li>
-     	     <li><a href="/">See all</a></li>
+	 	  	 <li class="nav-header">Tasks</li>
+     	     <li><a href="{% url 'task_list' %}">See all</a></li>
      	     
      	    {% for task in TASK_LIST %}
-     	      {% if task.completed = False %}
+     	      {% if task.completed %}
+     	      <!-- Don't show completed task -->
+     	      {% else %}
 			   <li><a href="{% url 'task_detail' pk=task.pk %}">{{ task.title }} (due {{ task.mdy_due_date }})</a></li>
 			  {% endif %}
 			{% endfor %}

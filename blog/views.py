@@ -3,22 +3,30 @@ from django.utils import timezone
 from .models import Post, Comment, Task, TaskNote, Project, Department
 from .forms import PostForm, CommentForm, TaskNoteForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 #Create your views here.
+#view for blog posts (main page)
 def post_list(request):
 	posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
-	tasks = get_task_list()
-	return render(request, 'blog/post_list.html', {'posts': posts, 'tasks': tasks})
+	return render(request, 'blog/post_list.html', {'posts': posts})
 
+#view to show list of current IT projects
 def project_list(request):
 	projects = Project.objects.filter(visible=True).order_by('name')
 	return render(request, 'project/project_list.html', {'projects': projects})
 
+#view to show list of current tasks
+def task_list(request):
+	tasks = Task.objects.all()
+	return render(request, 'task/task_list.html', {'tasks': tasks})
+
+#detailed view for given project
 def project_detail(request, pk):
 	project = get_object_or_404(Project, pk=pk)
 	return render(request, 'project/project_detail.html', {'project': project})
 
-#function to get task objects from database
+#function to get task objects from database - called in base html file
 def get_task_list():
 	task_list = Task.objects.all()
 	return task_list
@@ -27,18 +35,15 @@ def get_task_list():
 def task_detail(request, pk):
 	task = get_object_or_404(Task, pk=pk)
 	task_list = get_task_list()
-	return render(request, 'blog/task_detail.html', {'task': task, 'task_list': task_list})
+	return render(request, 'task/task_detail.html', {'task': task, 'task_list': task_list})
 
 def post_detail(request, pk):
 	post = get_object_or_404(Post, pk=pk)
 	return render(request, 'blog/post_detail.html', {'post': post})
 	
-def search_post_list(request):
-	posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
-	return render(request, 'blog/post_list.html', {'posts': posts})
-	
-def blog_search_list(request):
-	posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
+#basic search through blog posts
+def search_post_list(request, search_query):
+	posts = Post.objects.filter(Q(intro__icontains=search_query)).order_by('-published_date')
 	return render(request, 'blog/post_list.html', {'posts': posts})
 
 @login_required
@@ -122,6 +127,7 @@ def comment_remove(request, pk):
 	comment.delete()
 	return redirect('post_detail', pk=post_pk)
 
+@login_required
 def add_note_to_task(request, pk):
 	#get post (if exists) first
 	task = get_object_or_404(Task, pk=pk)

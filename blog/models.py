@@ -60,7 +60,7 @@ class Task(models.Model):
 		return str_date
 	
 	class Meta:
-		ordering = ['-priority', 'title']
+		ordering = ['completed', '-priority', 'due_date']
 	
 	class Admin:
 		pass
