@@ -21,23 +21,6 @@
         </p>
     </div>
     
-    <hr>
-    <a class="btn btn-default" href="/">Add note</a>
-    
-    {% for tasknote in task.tasknotes.all %}
-	
-		<div class="comment">
-			<div class="commentdate">
-				{{ tasknote.created_date }}
-			</div>		
-			
-			<p>{{ tasknote.note|linebreaks }}</p>
-		</div>
-		
-	{% empty %}
-		
-		<p>No comments.</p>		
-
-	{% endfor %}
+   
     
 {% endblock %}

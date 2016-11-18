@@ -51,8 +51,7 @@ def get_task_list():
 @login_required
 def task_detail(request, pk):
 	task = get_object_or_404(Task, pk=pk)
-	task_list = get_task_list()
-	return render(request, 'task/task_detail.html', {'task': task, 'task_list': task_list})
+	return render(request, 'task/task_detail.html', {'task': task})
 
 def post_detail(request, pk):
 	post = get_object_or_404(Post, pk=pk)
