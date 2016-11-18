@@ -31,6 +31,7 @@ def contact_list(request):
 
 
 #detailed view for given contact
+@login_required
 def contact_detail(request, pk):
 	contact = get_object_or_404(Contact, pk=pk)
 	return render(request, 'contact/contact_detail.html', {'contact': contact})
@@ -41,11 +42,13 @@ def project_detail(request, pk):
 	return render(request, 'project/project_detail.html', {'project': project})
 
 #function to get task objects from database - called in base html file as a context object
+@login_required
 def get_task_list():
 	task_list = Task.objects.all()
 	return task_list
 
 #show details about a task
+@login_required
 def task_detail(request, pk):
 	task = get_object_or_404(Task, pk=pk)
 	task_list = get_task_list()
