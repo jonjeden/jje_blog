@@ -20,12 +20,15 @@
     <div class="notes">
     <a href="{% url 'add_contact_note' pk=contact.pk %}">Add note</a><br />
     
+    <ul>
 			{% for cNote in contact.contact_notes.all %}
-				{{ cNote.note }} ({{ cNote.short_date }} by {{ cNote.note_author|title }})
+			<li>	{{ cNote }} </li>
 
 			{% empty %}
 				<p>No notes.</p>		
 			{% endfor %}
+			
+	</ul>
 			
 	</div>
     
