@@ -1,0 +1,53 @@
+{% extends 'blog/base.html' %}
+{% load staticfiles %}
+
+{% block title %}Big J's - Contacts{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+	
+	<a href="{% url 'contact_new' %}"><img src="{% static 'ico/add_user.png' %}"></a><br /><br />
+	
+{% endif %}
+
+{% if contacts %}
+	{% for contact in contacts %}
+	<hr>
+		<div class="contact">
+			<table cellpadding="12">
+			<tr>
+			<td><div>
+				<a href="{% url 'contact_detail' pk=contact.pk %}">{{ contact.first_name|title }} {{ contact.last_name|title }} <img src="{% static 'ico/edit.png' %}"></a><br />
+				Email: {{ contact.email }} <br />
+				Primary Phone: {{ contact.phone1 }}
+			</td></div>
+			
+			<td>
+			<div class="notes">
+			<ul>
+			{% for cNote in contact.contact_notes.all %}
+				<li>{{ cNote.note }} <i>({{ cNote.short_date }} - {{ cNote.note_author|title }}) </i></li>
+
+			{% empty %}
+				<p>No notes.</p>		
+			{% endfor %}
+			</ul>
+			</div>
+			</td>
+			</tr>
+			</table>	 
+		
+	{% endfor %}
+
+{% else %}
+
+<p>No contacts.</p>
+
+{% endif %}
+
+{% endblock %}
+
+{% block side_block %}
+
+{% endblock %}

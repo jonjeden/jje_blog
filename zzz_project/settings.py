@@ -31,6 +31,11 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [STATIC_DIR, ]
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 LOGIN_REDIRECT_URL = '/'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'outlaw747'
+EMAIL_HOST_PASSWORD = 'J88only!'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # Application definition
 

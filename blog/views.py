@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Post, Comment, Task, TaskNote, Project, Department
-from .forms import PostForm, CommentForm, TaskNoteForm
+from .models import Post, Comment, Task, TaskNote, Project, Department, Contact, ContactNote
+from .forms import PostForm, CommentForm, TaskNoteForm, ContactForm, ContactNoteForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.core.mail import send_mail
 
 #Create your views here.
 #view for blog posts (main page)
@@ -17,16 +18,29 @@ def project_list(request):
 	return render(request, 'project/project_list.html', {'projects': projects})
 
 #view to show list of current tasks
+@login_required
 def task_list(request):
 	tasks = Task.objects.all()
 	return render(request, 'task/task_list.html', {'tasks': tasks})
+
+#contacts/leads!
+@login_required
+def contact_list(request):
+	contacts = Contact.objects.all().order_by('first_name')
+	return render(request, 'contact/contact_list.html', {'contacts': contacts})
+
+
+#detailed view for given contact
+def contact_detail(request, pk):
+	contact = get_object_or_404(Contact, pk=pk)
+	return render(request, 'contact/contact_detail.html', {'contact': contact})
 
 #detailed view for given project
 def project_detail(request, pk):
 	project = get_object_or_404(Project, pk=pk)
 	return render(request, 'project/project_detail.html', {'project': project})
 
-#function to get task objects from database - called in base html file
+#function to get task objects from database - called in base html file as a context object
 def get_task_list():
 	task_list = Task.objects.all()
 	return task_list
@@ -128,12 +142,39 @@ def comment_remove(request, pk):
 	return redirect('post_detail', pk=post_pk)
 
 @login_required
-def add_note_to_task(request, pk):
-	#get post (if exists) first
-	task = get_object_or_404(Task, pk=pk)
-	#if submitting a comment, do the following:
+def contact_edit(request, pk):
+	contact = get_object_or_404(Contact, pk=pk)
 	if request.method == "POST":
-		form = TaskNoteForm(request.POST) #get comment form
+		form = ContactForm(request.POST, instance=contact)
+		if form.is_valid():
+			contact = form.save(commit=False)
+			contact.save()
+			return redirect('contact_detail', pk=contact.pk)
+	else:
+		form = ContactForm(instance=contact)
+	return render(request, 'contact/contact_edit.html', {'form': form})
+
+#view for creating new contact
+@login_required
+def contact_new(request):
+	if request.method == "POST": 
+		form = ContactForm(request.POST)
+		if form.is_valid():
+			contact = form.save(commit=False)
+			contact.save()
+			return redirect('contact_detail', pk=contact.pk)
+	else:
+		form = ContactForm()
+	return render(request, 'contact/contact_edit.html', {'form': form})
+
+#add a simple note to a task
+@login_required
+def add_note_to_task(request, pk):
+	#get note if it exists, first
+	task = get_object_or_404(Task, pk=pk)
+	#if submitting a note, do the following:
+	if request.method == "POST":
+		form = TaskNoteForm(request.POST) #get note form
 		if form.is_valid():
 			task_note = form.save(commit=False)
 			task_note.post = post
@@ -142,3 +183,22 @@ def add_note_to_task(request, pk):
 	else:
 		form = TaskNoteForm() #not posting, but blank form on load
 	return render(request, 'blog/add_task_note.html', {'form': form})
+
+#add a simple note to a contact and then send email
+@login_required
+def add_note_to_contact(request, pk):
+	contact = get_object_or_404(Contact, pk=pk)
+	#if submitting a note, do the following:
+	if request.method == "POST":
+		form = ContactNoteForm(request.POST) #get note form
+		if form.is_valid():
+			contact_note = form.save(commit=False)
+			contact_note.contact = contact
+			contact_note.save()
+			#subject, body, from email, to email, fail?
+			message = "Contact " + contact.first_name + " " + contact.last_name + " was updated with new note: " + contact_note.__str__()
+			send_mail('Contact note added', message, 'BigJ@scorcher.pythonanywhere.com', ['jonjeden@gmail.com'], fail_silently=False) 
+			return redirect('contact_list')
+	else:
+		form = ContactNoteForm() #not posting, but blank form on load
+	return render(request, 'contact/add_contact_note.html', {'form': form, 'contact': contact})

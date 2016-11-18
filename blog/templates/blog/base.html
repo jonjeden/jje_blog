@@ -98,7 +98,9 @@
               <li class="nav-header">Main</li>
               <li><a href="/">Blog</a></li>
               <li><a href="{% url 'project_list' %}">Projects</a></li>
-              <li><a href="/">Tech News</a></li>
+              {% if user.is_authenticated %}
+              	<li><a href="{% url 'contact_list' %}">Contacts</a></li>
+              {% endif %}
               <!-- <li class="nav-header">Latest Posts</li>
               <li><a href="/">Link</a></li>
               <li><a href="/">Link</a></li>

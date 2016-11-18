@@ -77,7 +77,6 @@ class TaskNote(models.Model):
 	
 	def __str__(self):
 		return self.note
-
 		
 class WebLink(models.Model):
 	title = models.CharField(max_length=200)
@@ -113,7 +112,6 @@ class Project(models.Model):
     class Meta:
         ordering = ('name',)
 
-
 '''
 this defines typically a government department that a project falls under
 '''
@@ -142,7 +140,7 @@ class Contact(models.Model):
     # This line is required. Links UserProfile to a User model instance.
 	#user = models.OneToOneField('auth.User')
 	
-	first_name = models.CharField(max_length=40, null=True, blank=True)
+	first_name = models.CharField(max_length=40, default="Required")
 	last_name = models.CharField(max_length=40, null=True, blank=True)
 	email = models.CharField(max_length=100, null=True, blank=True)
 	projects = models.ManyToManyField('blog.Project', blank=True)
@@ -157,6 +155,19 @@ class Contact(models.Model):
 	notes = models.TextField()
 	#picture = models.ImageField(upload_to='profile_images', blank=True)
 
-    # Override the __unicode__() method to return out something meaningful!
 	def __str__(self):
 		return self.first_name + ' ' + self.last_name
+	
+#note related to a contact model
+class ContactNote(models.Model):
+	contact = models.ForeignKey('blog.Contact', related_name='contact_notes')
+	note = models.CharField(max_length=400)
+	note_author = models.ForeignKey('auth.User')
+	created_date = models.DateTimeField(default=timezone.now)
+	
+	def short_date(self):	
+		str_date = self.created_date.month.__str__() + '/' + self.created_date.day.__str__() + '/' + self.created_date.year.__str__()
+		return str_date
+	
+	def __str__(self):
+		return self.note + " (" + self.short_date() + " by " + self.note_author.first_name + " " + self.note_author.last_name + ")"
