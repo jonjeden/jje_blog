@@ -19,7 +19,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'tmh#tgli1yv)h)zy8w1*6o+m@_gyf6k()7yag#!@&8^a%tnl3t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,11 +30,7 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [STATIC_DIR, ]
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 LOGIN_REDIRECT_URL = '/'
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'outlaw747'
-EMAIL_HOST_PASSWORD = 'aq1SW@de3FR$'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+
 
 # Application definition
 
